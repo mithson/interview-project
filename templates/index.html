@@ -1,59 +1,13 @@
+<!DOCTYPE html>
 <html>
-
-<head>
-  <title>Python Flask Greeting App</title>
-  <style>
-    #splash {
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color:#fff ;
-      color: #fff;
-      font-size: 4rem;
-    }
-    #content {
-      display: none;
-    }
-  </style>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-</head>
-
-<body>
-  <section id="splash">
-    <div class="spinner"></div>
-    <div><img class src="https://www.designmantic.com/logo-images/167287.png?company=Company+Name&slogan=&verify=1" height="100px" width="100px"></div>
-  </section>
-  <section id="content">
-    <p>
-    <h1 align="center">Python Flask Greeting App</h1>
-    </p>
-    <br><br><br>
-    <div class="container">
-      <div class="row">
-
-        <form align="center" method="post" action="{{ url_for('index') }}" enctype="multipart/form-data">
-          <label for="name">Name:</label>
-          <input type="text" name="name" id="name"><br><br>
-          <label for="city">City:</label>
-          <input type="text" name="city" id="city"><br><br>
-          <label for="email">Email:</label>
-          <input type="email" name="email" id="email"><br><br>
-          <label for="mobile">Mobile:</label>
-          <input type="text" name="mobile" id="mobile"><br><br>
-          <input type="submit" value="Submit" class="btn btn-info">
-        </form>
-      </div>
-    </div>
-  </section>
-  <script>
-    // JavaScript code to redirect to the second page after 3 seconds
-    setTimeout(function () {
-      document.getElementById('splash').style.display = 'none';
-      document.getElementById('content').style.display = 'block';
-    }, 3000);
-  </script>
-</body>
-
+  <head>
+    <title>Greeting App</title>
+  </head>
+  <body>
+    <h1>Greeting App</h1>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="user_image">
+      <button type="submit">Generate Greeting</button>
+    </form>
+  </body>
 </html>
