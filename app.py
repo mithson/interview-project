@@ -62,6 +62,9 @@ def download():
         filename = request.form['filename']
         file = request.form['file']
         cname= request.form['cname']
+        if cname == '' and filename == '' and file == '':
+            redirect(request.url)
+            flash('first upload files && enter your name')
         # print(file,filename)
         
         # Load user image using Pillow library
@@ -113,7 +116,7 @@ def download():
         mask = Image.new('L', user_img.size, 0)
         mask_draw = ImageDraw.Draw(mask)
         mask_draw.ellipse((0, 0, user_img.size[0], user_img.size[1]), fill=255)
-        
+        del mask_draw
 
         # Apply circular mask to user image
         user_img.putalpha(mask)
@@ -127,10 +130,9 @@ def download():
 
         # Save final image
         template_img.save('Greeting_final.png')
-
         # Download final image
         return send_file('Greeting_final.png', as_attachment=True)
-        return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+        # return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
     return render_template('result.html')
