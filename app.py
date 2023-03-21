@@ -1,16 +1,16 @@
 
 from io import BytesIO
-from flask import Flask, flash, request, redirect, url_for, render_template, send_file
+from flask import Flask, session, flash, request,send_from_directory, redirect, url_for, render_template, send_file
 import urllib.request
 import os
+import base64
+
+import cv2
 from werkzeug.utils import secure_filename
-from PIL import Image, ImageDraw, ImageOps
+import PIL
+from PIL import Image, ImageDraw, ImageOps,UnidentifiedImageError
  
 app = Flask(__name__)
-
-picFolder = os.path.join('static', 'images')
-print(picFolder)
-app.config['UPLOAD_FOLDER'] = picFolder 
 
 UPLOAD_FOLDER = 'uploads/'
  
@@ -20,31 +20,55 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
  
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
  
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-     
+    
  
 @app.route('/',methods = ['GET', 'POST'])
 def index():
-    pic1 = os.path.join(picFolder, 'BG.png')
     if request.method == 'POST':
         name = request.form['name']
         city = request.form['city']
         email = request.form['email']
         mobile = request.form['mobile']
-        return render_template('result.html', name=name, city=city, email=email, mobile=mobile, user_image=pic1)
+        return render_template('result.html', name=name, city=city, email=email, mobile=mobile)
     else:
         return render_template('index.html') 
 
 
-@app.route('/home', methods=['GET', 'POST'])
-def home():
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
     if request.method == 'POST':
+        if 'file' not in request.files:
+            return 'No file uploaded'
+        file = request.files['file']
+        if file.filename == '':
+            return 'No file selected'
+        if file:
+            filename = file.filename
+            file.save(os.path.join('uploads', file.filename))
+            image = cv2.imread(os.path.join('uploads', file.filename))
+            face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+            if len(faces) == 0:
+                return render_template('result.html', message='No face detected. Please upload another image.')
+            else: 
+                return render_template('result.html', filename=filename,file=file)
+
+
+@app.route('/download', methods=['GET', 'POST'])
+def download():
+    if request.method == 'POST':
+        filename = request.form['filename']
+        file = request.form['file']
+        print(file,filename)
         # Get user image from uploaded file
-        user_image = request.files['user_image'].read()
+        
 
         # Load user image using Pillow library
-        user_img = Image.open(BytesIO(user_image))
+        user_img = Image.open(f'uploads/{filename}')
+
+        # Load template image using Pillow library
+        template_img = Image.open('template.png')
 
         # Load template image using Pillow library
         template_img = Image.open('template.png')
@@ -85,8 +109,11 @@ def home():
 
         # Download final image
         return send_file('Greeting_final.png', as_attachment=True)
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 
     return render_template('result.html')
+
  
 if __name__ == "__main__":
     app.run()

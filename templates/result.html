@@ -4,11 +4,24 @@
     <title>Greeting App</title>
   </head>
   <body>
-    <br><br><br>
+    <br><br>
+  
     <h1 align="center">Greeting App</h1>
-    <form align="center" method="POST" enctype="multipart/form-data">
-      <input type="file" name="user_image">
-      <button type="submit">Generate Greeting</button>
-    </form>
+    <br>
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <button type="submit">Upload</button>
+  </form>
+    <br>
+    <form action="{{ url_for('download') }}" method="post">
+      <input type="hidden" name="filename" value="{{ filename }}">
+      <input type="hidden" name="file" value="{{ file }}">
+      <button type="submit">Download</button>
+  </form>
+    <center>{% if message %}
+      <p>{{ message }}</p>
+      {% endif %}
+      </center>
+      <br>
   </body>
 </html>
