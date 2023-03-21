@@ -1,52 +1,14 @@
+<!DOCTYPE html>
 <html>
-<head>
-<title>Python Flask Greeting app</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />        
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-</head>
-<body>
-<p><h1 align="center">Python Flask Greeting App</h1></p>
-<div class="container">
-<div class="row">
-    <p>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <ul>
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-          {% endif %}
-        {% endwith %}
-    </p>
-    <center> <img src="{{ user_image }}" usemap="#image_map" height="250px" width="200px"></center>
-    <map name="image_map">
-        <area alt="upload image" title="upload image" href="" coords="288,407,186" shape="circle">
-      </map>
-    {% if filename %}
-        <div>
-            <img class src="{{ url_for('display_image', filename=filename) }}" height="100px" width="100px">
-        </div>
-    {% endif %}
-    
-    <form method="post" action="/home" enctype="multipart/form-data">
-        <dl>
-            <p>
-                <input type="file" name="file" class="form-control" autocomplete="off" required>
-            </p>
-        </dl>
-        <p>
-            <input type="submit" value="Submit" class="btn btn-info">
-        </p>
+  <head>
+    <title>Greeting App</title>
+  </head>
+  <body>
+    <br><br><br>
+    <h1 align="center">Greeting App</h1>
+    <form align="center" method="POST" enctype="multipart/form-data">
+      <input type="file" name="user_image">
+      <button type="submit">Generate Greeting</button>
     </form>
-    {% if name%}
-    <h1>Your details:</h1>
-    <p><strong>Name:</strong> {{ name }}</p>
-    <p><strong>City:</strong> {{ city }}</p>
-    <p><strong>Email:</strong> {{ email }}</p>
-    <p><strong>Mobile:</strong> {{ mobile }}</p>
-    {% endif %}
-</div>
-</div>
-</body>
+  </body>
 </html>
