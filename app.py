@@ -8,7 +8,7 @@ import base64
 import cv2
 from werkzeug.utils import secure_filename
 import PIL
-from PIL import Image, ImageDraw, ImageOps,UnidentifiedImageError
+from PIL import Image, ImageDraw, ImageOps,UnidentifiedImageError, ImageFont
  
 app = Flask(__name__)
 
@@ -40,6 +40,7 @@ def upload():
         if 'file' not in request.files:
             return 'No file uploaded'
         file = request.files['file']
+        cname = request.form['cname']
         if file.filename == '':
             return 'No file selected'
         if file:
@@ -52,7 +53,7 @@ def upload():
             if len(faces) == 0:
                 return render_template('result.html', message='No face detected. Please upload another image.')
             else: 
-                return render_template('result.html', filename=filename,file=file)
+                 return render_template('result.html', cname=cname, filename=filename,file=file)
 
 
 @app.route('/download', methods=['GET', 'POST'])
@@ -60,10 +61,9 @@ def download():
     if request.method == 'POST':
         filename = request.form['filename']
         file = request.form['file']
-        print(file,filename)
-        # Get user image from uploaded file
+        cname= request.form['cname']
+        # print(file,filename)
         
-
         # Load user image using Pillow library
         user_img = Image.open(f'uploads/{filename}')
 
@@ -72,6 +72,27 @@ def download():
 
         # Load template image using Pillow library
         template_img = Image.open('template.png')
+
+        font = ImageFont.truetype('arial.ttf', size=30)
+
+        # Create ImageDraw object
+        draw = ImageDraw.Draw(template_img)
+
+        # Get size of template image
+        width, height = template_img.size
+
+        # Define text to be added below the image
+        text = cname
+
+        # Get size of text
+        text_width, text_height = draw.textsize(text, font=font)
+
+        # Calculate top-left position of text
+        text_x = width // 2 - text_width // 2
+        text_y = height - text_height - 30
+
+        # Add text to image
+        draw.text((text_x, text_y), text, font=font, fill=(0, 0, 0))
 
         # Resize user image to fit in template
         user_img = user_img.resize((500, 500))

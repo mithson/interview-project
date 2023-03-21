@@ -35,13 +35,13 @@
 
         <form align="center" method="post" action="{{ url_for('index') }}" enctype="multipart/form-data">
           <label for="name">Name:</label>
-          <input type="text" name="name" id="name"><br><br>
+          <input type="text" name="name" id="name" required><br><br>
           <label for="city">City:</label>
-          <input type="text" name="city" id="city"><br><br>
+          <input type="text" name="city" id="city" required><br><br>
           <label for="email">Email:</label>
-          <input type="email" name="email" id="email"><br><br>
+          <input type="email" name="email" id="email" required><br><br>
           <label for="mobile">Mobile:</label>
-          <input type="text" name="mobile" id="mobile"><br><br>
+          <input type="text" name="mobile" id="mobile" maxlength="12" minlength="10" required><br><br>
           <input type="submit" value="Submit" class="btn btn-info">
         </form>
       </div>

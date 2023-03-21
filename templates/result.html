@@ -8,14 +8,17 @@
   
     <h1 align="center">Greeting App</h1>
     <br>
-    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+    <form align="center" action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+      <label align="center" for="cname">Your Name on Card: </label>
+      <input align="center" type="text" name="cname" id="cname" maxlength="15" required><br><br>
       <input type="file" name="file">
       <button type="submit">Upload</button>
   </form>
     <br>
-    <form action="{{ url_for('download') }}" method="post">
+    <form align="center" action="{{ url_for('download') }}" method="post">
       <input type="hidden" name="filename" value="{{ filename }}">
       <input type="hidden" name="file" value="{{ file }}">
+      <input type="hidden" name="cname" value="{{ cname }}">
       <button type="submit">Download</button>
   </form>
     <center>{% if message %}
